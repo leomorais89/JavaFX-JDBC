@@ -2,7 +2,6 @@ package model.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.mysql.jdbc.Statement;
@@ -26,15 +25,12 @@ public class SetorDaoJDBC implements SetorDao {
 	public void insert(Setor setor) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("INSERT INTO setor (nome) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+			st = conn.prepareStatement("INSERT INTO setor (nomeSetor) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
 			st.setString(1, setor.getNome());
 			int teste = st.executeUpdate();
 			
 			if (teste > 0) {
-				ResultSet rs = st.getGeneratedKeys();
-				if (rs.next()) {
-					Alerts.showAlert("Sucesso", null, "Setor " + rs.getString(2) + " cadastrado com sucesso!", AlertType.CONFIRMATION);
-				}
+				Alerts.showAlert("Sucesso", null, "Setor " + setor.getNome() + " cadastrado com sucesso!", AlertType.CONFIRMATION);
 			}
 			else {
 				throw new dbException("Erro ao inserir dados no banco");

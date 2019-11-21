@@ -66,9 +66,8 @@ public class SetorFormControler implements Initializable {
 		}
 		if (setor.getId() != null) {
 			txtId.setText(String.valueOf(setor.getId()));
+			txtNome.setText(setor.getNome());
 		}
-		txtNome.setText(setor.getNome());
-		txtNome.selectedTextProperty();
 	}
 	
 	@Override
