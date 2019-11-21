@@ -47,6 +47,8 @@ public class SetorFormControler implements Initializable {
 		setor = getFormData();
 		servico.saveOrUpdate(setor);
 		Utils.currentStage(evento).close();
+		MainViewControler controle = new MainViewControler();
+		controle.onMiSetorAction();
 	}
 	
 	private Setor getFormData() {
