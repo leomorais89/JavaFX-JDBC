@@ -16,6 +16,8 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.entities.Setor;
+import model.services.SetorService;
 
 public class SetorViewControler implements Initializable {
 
@@ -24,13 +26,19 @@ public class SetorViewControler implements Initializable {
 
 	public void onBtnCadastrarAction(ActionEvent evento) {
 		Stage parentStage = (Stage) ((Node) evento.getSource()).getScene().getWindow();
-		criarForm("/gui/SetorFormView.fxml", parentStage);
+		Setor setor = new Setor();
+		criarForm("/gui/SetorFormView.fxml", parentStage, setor);
 	}
 	
-	public void criarForm(String endereco, Stage parentStage) {
+	public void criarForm(String endereco, Stage parentStage, Setor setor) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(endereco));
 			Pane pane = loader.load();
+			
+			SetorFormControler controler = loader.getController();
+			controler.setSetor(setor);
+			controler.setservico(new SetorService());
+			controler.updateFormDate();
 			
 			Stage newStage  = new Stage();
 			newStage.setTitle("Formulario Setor");
