@@ -2,7 +2,10 @@ package model.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mysql.jdbc.Statement;
 
@@ -40,6 +43,31 @@ public class SetorDaoJDBC implements SetorDao {
 			throw new dbException(e.getMessage());
 		}
 		finally {
+			DB.closeStatement(st);
+		}
+	}
+
+	@Override
+	public List<Setor> listAllSetor() {
+		ResultSet rs = null;
+		PreparedStatement st = null;
+		List<Setor> list = new ArrayList<Setor>();
+		try {
+			st = conn.prepareStatement("Select * from setor order by nomeSetor");
+			rs = st.executeQuery();
+			while (rs.next()) {
+				Setor setor = new Setor();
+				setor.setId(rs.getInt("idSetor"));
+				setor.setNome(rs.getString("nomeSetor"));
+				list.add(setor);
+			}
+			return list;
+		}
+		catch (SQLException e) {
+			throw new dbException(e.getMessage());
+		}
+		finally {
+			DB.closeResultSet(rs);
 			DB.closeStatement(st);
 		}
 	}

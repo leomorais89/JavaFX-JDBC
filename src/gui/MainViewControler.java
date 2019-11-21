@@ -3,6 +3,7 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import application.Main;
 import gui.util.Alerts;
@@ -11,10 +12,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.VBox;
+import model.services.SetorService;
 
 public class MainViewControler implements Initializable {
 
@@ -26,7 +28,7 @@ public class MainViewControler implements Initializable {
 	private MenuItem miSobre;
 	
 	public void onMiSetorAction() {
-		loadView("/gui/SetorView.fxml");
+		loadView("/gui/SetorView.fxml", (SetorViewControler controle) -> {controle.setSetorService(new SetorService()); controle.updateTableView();});
 	}
 	
 	public void onMiVendedorAction() {
@@ -37,7 +39,7 @@ public class MainViewControler implements Initializable {
 		System.out.println("miSobre");
 	}
 	
-	public void loadView(String endereco) {
+	public <T> void loadView(String endereco, Consumer<T> acaoInicial) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(endereco));
 			VBox vbox = loader.load();
@@ -49,8 +51,12 @@ public class MainViewControler implements Initializable {
 			mainVbox.getChildren().clear();
 			mainVbox.getChildren().add(mainMenu);
 			mainVbox.getChildren().addAll(vbox.getChildren());
+			
+			T controle = loader.getController();
+			acaoInicial.accept(controle);
 		}
 		catch (IOException e) {
+			e.printStackTrace();
 			Alerts.showAlert("IOException", "Erro ao carregar", e.getMessage(), AlertType.ERROR);
 		}
 	}

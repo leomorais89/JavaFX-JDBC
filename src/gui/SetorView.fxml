@@ -13,10 +13,10 @@
           <Button fx:id="btnCadastrar" mnemonicParsing="false" onAction="#onBtnCadastrarAction" text="Cadastrar" />
         </items>
       </ToolBar>
-      <TableView prefHeight="286.0" prefWidth="600.0">
+      <TableView fx:id="tvSetor" prefHeight="286.0" prefWidth="600.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="ID" />
-          <TableColumn prefWidth="75.0" text="Nome" />
+          <TableColumn fx:id="tcId" prefWidth="75.0" text="ID" />
+          <TableColumn fx:id="tcNome" prefWidth="75.0" text="Nome" />
         </columns>
       </TableView>
    </children>
