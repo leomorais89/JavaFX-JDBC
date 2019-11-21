@@ -39,7 +39,7 @@ public class MainViewControler implements Initializable {
 		System.out.println("miSobre");
 	}
 	
-	public <T> void loadView(String endereco, Consumer<T> acaoInicial) {
+	public synchronized <T> void loadView(String endereco, Consumer<T> acaoInicial) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(endereco));
 			VBox vbox = loader.load();

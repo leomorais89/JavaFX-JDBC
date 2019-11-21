@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import application.Main;
 import gui.util.Alerts;
 import gui.util.Utils;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -36,6 +38,10 @@ public class SetorViewControler implements Initializable {
 	private TableColumn<Setor, Integer> tcId;
 	@FXML
 	private TableColumn<Setor, String> tcNome;
+	@FXML
+	private TableColumn<Setor, Setor> tbEdit;
+	@FXML
+	private TableColumn<Setor, Setor> tbRemove;
 	
 	private SetorService servico;
 
@@ -79,6 +85,44 @@ public class SetorViewControler implements Initializable {
 		List<Setor> list = servico.todosSetores();
 		ObservableList<Setor> obsSetor = FXCollections.observableArrayList(list);
 		tvSetor.setItems(obsSetor);
+		initEditButtons();
+		initRemoveButtons();
+	}
+	
+	private void initEditButtons() {
+		tbEdit.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tbEdit.setCellFactory(param -> new TableCell<Setor, Setor>() {
+			private final Button button = new Button("Edit");
+
+			@Override
+			protected void updateItem(Setor setor, boolean empty) {
+				super.updateItem(setor, empty);
+				if (setor == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(button);
+				button.setOnAction(event -> criarForm("/gui/DepartmentForm.fxml", Utils.currentStage(event), setor));
+			}
+		});
+	}
+	
+	private void initRemoveButtons() {
+		tbRemove.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tbRemove.setCellFactory(param -> new TableCell<Setor, Setor>() {
+			private final Button button = new Button("Remove");
+
+			@Override
+			protected void updateItem(Setor setor, boolean empty) {
+				super.updateItem(setor, empty);
+				if (setor == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(button);
+				//button.setOnAction(event -> removeEntity(setor));
+			}
+		});
 	}
 	
 	@Override
