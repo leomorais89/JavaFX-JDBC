@@ -3,6 +3,8 @@ package gui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import gui.util.Utils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -35,10 +37,25 @@ public class SetorFormControler implements Initializable {
 		this.servico = servico;
 	}
 	
-	public void onBtnSalvarAction() {
-		System.out.println("onBtnSalvarAction");
+	public void onBtnSalvarAction(ActionEvent evento) {
+		if (setor == null) {
+			throw new IllegalStateException("Setor estava vazio");
+		}
+		if (servico == null) {
+			throw new IllegalStateException("Serviço estava vazio");
+		}
+		setor = getFormData();
+		servico.saveOrUpdate(setor);
+		Utils.currentStage(evento).close();
 	}
 	
+	private Setor getFormData() {
+		Setor setor = new Setor();
+		setor.setId(Utils.tryParseToInt(txtId.getText()));
+		setor.setNome(txtNome.getText());
+		return setor;
+	}
+
 	public void onBtnCancelarAction() {
 		System.out.println("onBtnCancelarAction");
 	}

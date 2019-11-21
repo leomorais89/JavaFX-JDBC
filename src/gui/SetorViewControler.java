@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import gui.util.Alerts;
+import gui.util.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +26,7 @@ public class SetorViewControler implements Initializable {
 	private Button btnCadastrar;
 
 	public void onBtnCadastrarAction(ActionEvent evento) {
-		Stage parentStage = (Stage) ((Node) evento.getSource()).getScene().getWindow();
+		Stage parentStage = Utils.currentStage(evento);
 		Setor setor = new Setor();
 		criarForm("/gui/SetorFormView.fxml", parentStage, setor);
 	}

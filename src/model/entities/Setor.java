@@ -26,6 +26,10 @@ public class Setor {
 	public Integer getId() {
 		return Id;
 	}
+	
+	public void setId(Integer id) {
+		this.Id = id;
+	}
 
 	@Override
 	public String toString() {
