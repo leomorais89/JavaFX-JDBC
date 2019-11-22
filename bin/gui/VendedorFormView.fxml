@@ -83,7 +83,7 @@
                   <ComboBox fx:id="cbSetor" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                   <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                      <children>
-                        <Button mnemonicParsing="false" text="Salvar">
+                        <Button fx:id="btnSalvar" mnemonicParsing="false" onAction="#onBtnSalvarAction" text="Salvar">
                            <HBox.margin>
                               <Insets left="60.0" top="10.0" />
                            </HBox.margin>

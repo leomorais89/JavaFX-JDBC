@@ -26,6 +26,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Setor;
 import model.entities.Vendedor;
+import model.services.SetorService;
 import model.services.VendedorService;
 
 public class VendedorViewControler implements Initializable {
@@ -76,7 +77,7 @@ public class VendedorViewControler implements Initializable {
 			
 			VendedorFormControler controle = loader.getController();
 			controle.setVendedor(vendedor);
-			controle.setVendedorService(new VendedorService());
+			controle.setServices(new VendedorService(), new SetorService());
 			controle.updateFormDate(vendedor);
 			
 			Stage newStage = new Stage();

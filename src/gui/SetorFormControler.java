@@ -1,6 +1,8 @@
 package gui;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import gui.util.Utils;
@@ -24,10 +26,12 @@ public class SetorFormControler implements Initializable {
 	@FXML
 	private Button btnCancelar;
 	@FXML
-	private Label lblMsgErro;
+	private Label lblMsgErro1;
 	
 	private Setor setor;
 	private SetorService servico;
+	
+	Map<String, String> erros = new HashMap<>();
 	
 	public void setSetor(Setor setor) {
 		this.setor = setor;
@@ -45,16 +49,28 @@ public class SetorFormControler implements Initializable {
 			throw new IllegalStateException("Serviço estava vazio");
 		}
 		setor = getFormData();
-		servico.saveOrUpdate(setor);
-		Utils.currentStage(evento).close();
-		MainViewControler controle = new MainViewControler();
-		controle.onMiSetorAction();
+		if (erros.size() < 1) {
+			servico.saveOrUpdate(setor);
+			Utils.currentStage(evento).close();
+			MainViewControler controle = new MainViewControler();
+			controle.onMiSetorAction();
+		}
+		erros.clear();
 	}
 	
 	private Setor getFormData() {
+		
+		erros = new HashMap<String, String>();
 		Setor setor = new Setor();
 		setor.setId(Utils.tryParseToInt(txtId.getText()));
 		setor.setNome(txtNome.getText());
+		if (txtNome.getText().equals("") || txtNome.getText().trim().equals("")) {
+			erros.put("Nome", "Nome não pode ser em branco!");
+		}
+		
+		if (erros.size() > 0) {
+			lblMsgErro1.setText(erros.get("Nome"));
+		}
 		return setor;
 	}
 

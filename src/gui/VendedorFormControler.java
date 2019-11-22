@@ -8,11 +8,13 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import model.entities.Setor;
 import model.entities.Vendedor;
+import model.services.SetorService;
 import model.services.VendedorService;
 
 public class VendedorFormControler implements Initializable {
@@ -29,16 +31,25 @@ public class VendedorFormControler implements Initializable {
 	private TextField txtSalario;
 	@FXML
 	private ComboBox<Setor> cbSetor;
+	@FXML
+	private Button btnSalvar;
 
 	private Vendedor vendedor;
-	private VendedorService servico;
+	private VendedorService servicoService;
+	private SetorService setorService;
+	
+	@FXML
+	public void onBtnSalvarAction() {
+		
+	}
 	
 	public void setVendedor(Vendedor vendedor) {
 		this.vendedor = vendedor;
 	}
 	
-	public void setVendedorService(VendedorService servico) {
-		this.servico = servico;
+	public void setServices(VendedorService servicoService, SetorService setorService) {
+		this.servicoService = servicoService;
+		this.setorService = setorService;
 	}
 	
 	public void updateFormDate(Vendedor vendedor) {
