@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mysql.jdbc.Statement;
-
 import db.DB;
 import db.dbException;
 import gui.util.Alerts;
@@ -28,12 +26,12 @@ public class SetorDaoJDBC implements SetorDao {
 	public void insert(Setor setor) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("INSERT INTO setor (nomeSetor) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+			st = conn.prepareStatement("INSERT INTO setor (nomeSetor) VALUES (?)");
 			st.setString(1, setor.getNome());
 			int teste = st.executeUpdate();
 			
 			if (teste > 0) {
-				Alerts.showAlert("Sucesso", null, "Setor " + setor.getNome() + " cadastrado com sucesso!", AlertType.CONFIRMATION);
+				Alerts.showAlert("Sucesso", null, "Setor " + setor.getNome() + " cadastrado com sucesso!", AlertType.INFORMATION);
 			}
 			else {
 				throw new dbException("Erro ao inserir dados no banco");
@@ -81,7 +79,7 @@ public class SetorDaoJDBC implements SetorDao {
 			st.setInt(2, setor.getId());
 			int teste = st.executeUpdate();
 			if (teste > 0) {
-				Alerts.showAlert("Atualização de Dados", null, "Setor " + setor.getNome() + " atualizado com sucesso!", AlertType.CONFIRMATION);
+				Alerts.showAlert("Atualização de Dados", null, "Setor " + setor.getNome() + " atualizado com sucesso!", AlertType.INFORMATION);
 			}
 			else {
 				throw new dbException("Erro ao atualizar dados no banco");
@@ -90,6 +88,29 @@ public class SetorDaoJDBC implements SetorDao {
 		catch (SQLException e) {
 			e.printStackTrace();
 			Alerts.showAlert("Erro ao atualizar dados", null, e.getMessage(), AlertType.ERROR);
+		}
+		finally {
+			DB.closeStatement(st);
+		}
+	}
+
+	@Override
+	public void delSetor(Setor setor) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("delete from setor where idSetor = ?");
+			st.setInt(1, setor.getId());
+			int teste = st.executeUpdate();
+			if (teste > 0) {
+				Alerts.showAlert("Exclusão de dados", null, "Setor " + setor.getNome() + " foi excluido com sucesso!", AlertType.INFORMATION);
+			}
+			else {
+				throw new dbException("Erro ao excluir o dado");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			Alerts.showAlert("Erro na exclusão", null, e.getMessage(), AlertType.ERROR);
 		}
 		finally {
 			DB.closeStatement(st);

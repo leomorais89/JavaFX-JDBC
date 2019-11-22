@@ -3,9 +3,12 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import application.Main;
+import db.dbException;
+import db.dbIntegridadeException;
 import gui.util.Alerts;
 import gui.util.Utils;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -18,6 +21,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -120,9 +124,25 @@ public class SetorViewControler implements Initializable {
 					return;
 				}
 				setGraphic(button);
-				//button.setOnAction(event -> removeEntity(setor));
+				button.setOnAction(event -> removeEntity(setor));
 			}
 		});
+	}
+	
+	private void removeEntity(Setor setor) {
+		Optional<ButtonType> resultado = Alerts.showConfirmation("Confirmar Exclusão", "Realmente deseja excluir esse Setor?");
+		if (resultado.get() == ButtonType.OK) {
+			if (servico == null) {
+				throw new dbException("Serviço esta vazio!");
+			}
+			try {
+				servico.remover(setor);
+				updateTableView();
+			}
+			catch (dbIntegridadeException e) {
+				Alerts.showAlert("Acesso negado", null, e.getMessage(), AlertType.INFORMATION);
+			}
+		}
 	}
 	
 	@Override

@@ -22,4 +22,8 @@ public class SetorService {
 	public List<Setor> todosSetores() {
 		return dao.listAllSetor();
 	}
+	
+	public void remover(Setor setor) {
+		dao.delSetor(setor);
+	}
 }
