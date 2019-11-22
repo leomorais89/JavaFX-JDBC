@@ -13,4 +13,8 @@ public class VendedorService {
 	public List<Vendedor> todosVendedores() {
 		return dao.todosVendedores();
 	}
+	
+	public void saveOrUpdate(Vendedor vendedor) {
+		dao.insert(vendedor);
+	}
 }

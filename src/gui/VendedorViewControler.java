@@ -98,6 +98,7 @@ public class VendedorViewControler implements Initializable {
 		tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		tcNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
 		tcDataNascimento.setCellValueFactory(new PropertyValueFactory<>("dataNascimento"));
+		Utils.formatTableColumnDate(tcDataNascimento, "dd/MM/yyyy");
 		tcEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 		tcSalario.setCellValueFactory(new PropertyValueFactory<>("salario"));
 		tcSetor.setCellValueFactory(new PropertyValueFactory<>("setor"));

@@ -33,6 +33,6 @@ public class Setor {
 
 	@Override
 	public String toString() {
-		return "Setor [Id=" + Id + ", Nome=" + Nome + "]";
+		return Nome;
 	}
 }

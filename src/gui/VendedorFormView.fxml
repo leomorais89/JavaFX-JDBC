@@ -95,6 +95,7 @@
                         </Button>
                      </children>
                   </HBox>
+                  <Label textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                </children>
                <VBox.margin>
                   <Insets top="10.0" />

@@ -11,6 +11,8 @@ import java.util.Map;
 
 import db.DB;
 import db.dbException;
+import gui.util.Alerts;
+import javafx.scene.control.Alert.AlertType;
 import model.dao.VendedorDao;
 import model.entities.Setor;
 import model.entities.Vendedor;
@@ -60,6 +62,28 @@ public class VendedorDaoJDBC implements VendedorDao {
 		finally {
 			DB.closeResultSet(rs);
 			DB.closeStatement(st);
+		}
+	}
+
+	@Override
+	public void insert(Vendedor vendedor) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("insert into vendedor (nomeVendedor, dataNascimento, email, salario, idSetor) values (?, ?, ?, ?, ?)");
+			st.setString(1, vendedor.getNome());
+			st.setDate(2, new java.sql.Date(vendedor.getDataNascimento().getTime()));
+			st.setString(3, vendedor.getEmail());
+			st.setDouble(4, vendedor.getSalario());
+			st.setInt(5, vendedor.getSetor().getId());
+			int teste = st.executeUpdate();
+			
+			if(teste > 0) {
+				Alerts.showAlert("Sucesso", null, "Vendedor " + vendedor.getNome() + " cadastrado com sucesso", AlertType.INFORMATION);
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new dbException(e.getMessage());
 		}
 	}
 }

@@ -1,11 +1,16 @@
 package gui;
 
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import gui.util.Utils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -39,8 +44,18 @@ public class VendedorFormControler implements Initializable {
 	private SetorService setorService;
 	
 	@FXML
-	public void onBtnSalvarAction() {
-		
+	public void onBtnSalvarAction(ActionEvent evento) {
+		if (vendedor == null) {
+			throw new IllegalStateException("Vendedor está vazio!");
+		}
+		if (servicoService == null) {
+			throw new IllegalStateException("Serviço Vendedor está vazio!");
+		}
+		vendedor = getFormDate();
+		servicoService.saveOrUpdate(vendedor);
+		Utils.currentStage(evento).close();
+		MainViewControler controle = new MainViewControler();
+		controle.onMiVendedorAction();
 	}
 	
 	public void setVendedor(Vendedor vendedor) {
@@ -56,22 +71,37 @@ public class VendedorFormControler implements Initializable {
 		if (vendedor == null) {
 			throw new IllegalStateException("Vendedor está vazio");
 		}
+		
+		List<Setor> setores = setorService.todosSetores();
+		cbSetor.getItems().addAll(setores);
+		
 		if (vendedor.getId() != null) {
 			txtId.setText(String.valueOf(vendedor.getId()));
-			txtNome.setText(vendedor.getNome());
-			if (vendedor.getDataNascimento() != null) {
-				dpDataNascimento.setValue(LocalDate.ofInstant(vendedor.getDataNascimento().toInstant(), ZoneId.systemDefault()));
-			}
-			txtEmail.setText(vendedor.getEmail());
 			Locale.setDefault(Locale.US);
 			txtSalario.setText(String.format("%.2f", vendedor.getSalario()));
-			if (vendedor.getSetor() == null) {
-				cbSetor.getSelectionModel().selectFirst();
-			}
-			else {
-				cbSetor.setValue(vendedor.getSetor());
-			}
 		}
+		txtNome.setText(vendedor.getNome());
+		if (vendedor.getDataNascimento() != null) {
+			dpDataNascimento.setValue(LocalDate.ofInstant(vendedor.getDataNascimento().toInstant(), ZoneId.systemDefault()));
+		}
+		txtEmail.setText(vendedor.getEmail());
+		if (vendedor.getSetor() == null) {
+			cbSetor.getSelectionModel().selectFirst();
+		}
+		else {
+			cbSetor.setValue(vendedor.getSetor());
+		}
+	}
+	
+	private Vendedor getFormDate() {
+		Vendedor vendedor = new Vendedor();
+		vendedor.setId(Utils.tryParseToInt(txtId.getText()));
+		vendedor.setNome(txtNome.getText());
+		vendedor.setDataNascimento(Date.from(Instant.from(dpDataNascimento.getValue().atStartOfDay(ZoneId.systemDefault()))));
+		vendedor.setEmail(txtEmail.getText());
+		vendedor.setSalario(Double.parseDouble(txtSalario.getText()));
+		vendedor.setSetor(cbSetor.getValue());
+		return vendedor;
 	}
 	
 	@Override
