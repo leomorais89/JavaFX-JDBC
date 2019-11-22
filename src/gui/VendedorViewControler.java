@@ -16,10 +16,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
@@ -53,9 +53,11 @@ public class VendedorViewControler implements Initializable {
 		this.servico = servico;
 	}
 	
+	@FXML
 	public void onBtnCadastrarAction(ActionEvent evento) {
 		Stage parentStage = Utils.currentStage(evento);
-		criarForm("/gui/VendedorFormView.fxml", parentStage);
+		Vendedor vendedor = new Vendedor();
+		criarForm("/gui/VendedorFormView.fxml", parentStage, vendedor);
 	}
 	
 	public void updateTableView() {
@@ -67,10 +69,15 @@ public class VendedorViewControler implements Initializable {
 		tvVendedor.setItems(obsVendedor);
 	}
 	
-	public void criarForm(String endereco, Stage parentStage) {
+	public void criarForm(String endereco, Stage parentStage, Vendedor vendedor) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(endereco));
 			Pane pane = loader.load();
+			
+			VendedorFormControler controle = loader.getController();
+			controle.setVendedor(vendedor);
+			controle.setVendedorService(new VendedorService());
+			controle.updateFormDate(vendedor);
 			
 			Stage newStage = new Stage();
 			newStage.setTitle("Formulário Vendedor");

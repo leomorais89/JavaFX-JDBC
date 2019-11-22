@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="764.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="764.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.VendedorFormControler">
    <children>
       <VBox prefHeight="381.0" prefWidth="764.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -75,12 +75,12 @@
                   <Label textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                   <Label textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                   <Label textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                  <TextField editable="false" GridPane.columnIndex="1" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <TextField fx:id="txtId" editable="false" GridPane.columnIndex="1" />
+                  <TextField fx:id="txtNome" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtEmail" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="txtSalario" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <DatePicker fx:id="dpDataNascimento" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <ComboBox fx:id="cbSetor" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                   <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                      <children>
                         <Button mnemonicParsing="false" text="Salvar">
