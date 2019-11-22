@@ -1,19 +1,28 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import application.Main;
+import gui.util.Alerts;
+import gui.util.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Setor;
 import model.entities.Vendedor;
@@ -44,8 +53,9 @@ public class VendedorViewControler implements Initializable {
 		this.servico = servico;
 	}
 	
-	public void onBtnCadastrarAction() {
-		
+	public void onBtnCadastrarAction(ActionEvent evento) {
+		Stage parentStage = Utils.currentStage(evento);
+		criarForm("/gui/VendedorFormView.fxml", parentStage);
 	}
 	
 	public void updateTableView() {
@@ -55,6 +65,24 @@ public class VendedorViewControler implements Initializable {
 		List<Vendedor> list = servico.todosVendedores();
 		ObservableList<Vendedor> obsVendedor = FXCollections.observableArrayList(list);
 		tvVendedor.setItems(obsVendedor);
+	}
+	
+	public void criarForm(String endereco, Stage parentStage) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(endereco));
+			Pane pane = loader.load();
+			
+			Stage newStage = new Stage();
+			newStage.setTitle("Formulário Vendedor");
+			newStage.setScene(new Scene(pane));
+			newStage.setResizable(false);
+			newStage.initOwner(parentStage);
+			newStage.initModality(Modality.WINDOW_MODAL);
+			newStage.showAndWait();
+		}
+		catch (IOException e) {
+			Alerts.showAlert("IOException", null, e.getMessage(), AlertType.ERROR);
+		}
 	}
 	
 	@Override
