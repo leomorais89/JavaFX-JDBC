@@ -58,8 +58,8 @@ public class SetorFormControler implements Initializable {
 		return setor;
 	}
 
-	public void onBtnCancelarAction() {
-		System.out.println("onBtnCancelarAction");
+	public void onBtnCancelarAction(ActionEvent evento) {
+		Utils.currentStage(evento).close();
 	}
 	
 	public void updateFormDate() {

@@ -72,4 +72,27 @@ public class SetorDaoJDBC implements SetorDao {
 		}
 	}
 
+	@Override
+	public void update(Setor setor) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("update setor set nomeSetor = ? where idSetor = ?");
+			st.setString(1, setor.getNome());
+			st.setInt(2, setor.getId());
+			int teste = st.executeUpdate();
+			if (teste > 0) {
+				Alerts.showAlert("Atualização de Dados", null, "Setor " + setor.getNome() + " atualizado com sucesso!", AlertType.CONFIRMATION);
+			}
+			else {
+				throw new dbException("Erro ao atualizar dados no banco");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			Alerts.showAlert("Erro ao atualizar dados", null, e.getMessage(), AlertType.ERROR);
+		}
+		finally {
+			DB.closeStatement(st);
+		}
+	}
 }

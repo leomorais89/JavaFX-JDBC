@@ -11,7 +11,12 @@ public class SetorService {
 	private SetorDao dao = FabricaDao.criarSetorDao();
 	
 	public void saveOrUpdate(Setor setor) {
-		dao.insert(setor);
+		if (setor.getId() == null) {
+			dao.insert(setor);
+		}
+		else {
+			dao.update(setor);
+		}
 	}
 	
 	public List<Setor> todosSetores() {

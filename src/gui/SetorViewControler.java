@@ -102,7 +102,7 @@ public class SetorViewControler implements Initializable {
 					return;
 				}
 				setGraphic(button);
-				button.setOnAction(event -> criarForm("/gui/DepartmentForm.fxml", Utils.currentStage(event), setor));
+				button.setOnAction(event -> criarForm("/gui/SetorFormView.fxml", Utils.currentStage(event), setor));
 			}
 		});
 	}
