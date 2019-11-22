@@ -17,8 +17,8 @@
         <columns>
           <TableColumn fx:id="tcId" prefWidth="75.0" text="ID" />
           <TableColumn fx:id="tcNome" prefWidth="75.0" text="Nome" />
-            <TableColumn fx:id="tbEdit" prefWidth="75.0" />
-            <TableColumn fx:id="tbRemove" prefWidth="75.0" />
+            <TableColumn fx:id="tbEdit" prefWidth="46.0" />
+            <TableColumn fx:id="tbRemove" prefWidth="73.0" />
         </columns>
       </TableView>
    </children>

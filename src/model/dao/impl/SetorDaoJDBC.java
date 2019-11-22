@@ -87,7 +87,7 @@ public class SetorDaoJDBC implements SetorDao {
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
-			Alerts.showAlert("Erro ao atualizar dados", null, e.getMessage(), AlertType.ERROR);
+			throw new dbException(e.getMessage());
 		}
 		finally {
 			DB.closeStatement(st);
@@ -110,7 +110,7 @@ public class SetorDaoJDBC implements SetorDao {
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
-			Alerts.showAlert("Erro na exclusão", null, e.getMessage(), AlertType.ERROR);
+			throw new dbException(e.getMessage());
 		}
 		finally {
 			DB.closeStatement(st);

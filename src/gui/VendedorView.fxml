@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="421.0" prefWidth="715.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.VendedorViewControler">
+   <children>
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
+        <items>
+          <Button fx:id="btnCadastrar" mnemonicParsing="false" onAction="#onBtnCadastrarAction" text="Cadastrar" />
+        </items>
+      </ToolBar>
+      <TableView fx:id="tvVendedor" prefHeight="287.0" prefWidth="667.0">
+        <columns>
+          <TableColumn fx:id="tcId" prefWidth="51.0" text="Id" />
+          <TableColumn fx:id="tcNome" prefWidth="118.0" text="Nome" />
+            <TableColumn fx:id="tcDataNascimento" prefWidth="121.0" text="Data Nascimento" />
+            <TableColumn fx:id="tcEmail" prefWidth="159.0" text="Email" />
+            <TableColumn fx:id="tcSalario" minWidth="4.0" prefWidth="69.0" text="Salario" />
+            <TableColumn fx:id="tcSetor" prefWidth="69.0" text="Setor" />
+        </columns>
+      </TableView>
+   </children>
+</VBox>
