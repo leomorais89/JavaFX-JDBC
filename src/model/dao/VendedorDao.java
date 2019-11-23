@@ -8,4 +8,5 @@ public interface VendedorDao {
 
 	public List<Vendedor> todosVendedores();
 	public void insert(Vendedor vendedor);
+	public void update(Vendedor vendedor);
 }

@@ -1,6 +1,7 @@
 package model.dao.impl;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -79,6 +80,29 @@ public class VendedorDaoJDBC implements VendedorDao {
 			
 			if(teste > 0) {
 				Alerts.showAlert("Sucesso", null, "Vendedor(a) " + vendedor.getNome() + " cadastrado com sucesso", AlertType.INFORMATION);
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new dbException(e.getMessage());
+		}
+	}
+
+	@Override
+	public void update(Vendedor vendedor) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("update vendedor set nomeVendedor=?, dataNascimento=?, email=?, salario=?, idSetor=? where idVendedor=?");
+			st.setString(1, vendedor.getNome());
+			st.setDate(2, new java.sql.Date(vendedor.getDataNascimento().getTime()));
+			st.setString(3, vendedor.getEmail());
+			st.setDouble(4, vendedor.getSalario());
+			st.setInt(5, vendedor.getSetor().getId());
+			st.setInt(6, vendedor.getId());
+			int teste = st.executeUpdate();
+			
+			if (teste > 0) {
+				Alerts.showAlert("Sucesso", null, "Dados do vendedor(a) " + vendedor.getNome() + " auterados com sucesso!", AlertType.INFORMATION);
 			}
 		}
 		catch (SQLException e) {

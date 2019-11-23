@@ -15,6 +15,11 @@ public class VendedorService {
 	}
 	
 	public void saveOrUpdate(Vendedor vendedor) {
-		dao.insert(vendedor);
+		if (vendedor.getId() == null) {
+			dao.insert(vendedor);
+		}
+		else {
+			dao.update(vendedor);
+		}
 	}
 }

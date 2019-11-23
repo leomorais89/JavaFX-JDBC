@@ -114,7 +114,7 @@ public class VendedorViewControler implements Initializable {
 					return;
 				}
 				setGraphic(button);
-				button.setOnAction(event -> criarForm("/gui/SetorFormView.fxml", Utils.currentStage(event), vendedor));
+				button.setOnAction(event -> criarForm("/gui/VendedorFormView2.fxml", Utils.currentStage(event), vendedor));
 			}
 		});
 	}
