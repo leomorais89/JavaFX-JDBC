@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import application.Main;
 import gui.util.Alerts;
 import gui.util.Utils;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -47,6 +49,10 @@ public class VendedorViewControler implements Initializable {
 	private TableColumn<Vendedor, Double> tcSalario;
 	@FXML
 	private TableColumn<Vendedor, Setor> tcSetor;
+	@FXML
+	private TableColumn<Vendedor, Vendedor> tbEdit;
+	@FXML
+	private TableColumn<Vendedor, Vendedor> tbRemove;
 	
 	private VendedorService servico;
 	
@@ -58,7 +64,7 @@ public class VendedorViewControler implements Initializable {
 	public void onBtnCadastrarAction(ActionEvent evento) {
 		Stage parentStage = Utils.currentStage(evento);
 		Vendedor vendedor = new Vendedor();
-		criarForm("/gui/VendedorFormView.fxml", parentStage, vendedor);
+		criarForm("/gui/VendedorFormView2.fxml", parentStage, vendedor);
 	}
 	
 	public void updateTableView() {
@@ -68,6 +74,8 @@ public class VendedorViewControler implements Initializable {
 		List<Vendedor> list = servico.todosVendedores();
 		ObservableList<Vendedor> obsVendedor = FXCollections.observableArrayList(list);
 		tvVendedor.setItems(obsVendedor);
+		initEditButtons();
+		initRemoveButtons();
 	}
 	
 	public void criarForm(String endereco, Stage parentStage, Vendedor vendedor) {
@@ -93,6 +101,42 @@ public class VendedorViewControler implements Initializable {
 		}
 	}
 	
+	private void initEditButtons() {
+		tbEdit.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tbEdit.setCellFactory(param -> new TableCell<Vendedor, Vendedor>() {
+			private final Button button = new Button("Edit");
+
+			@Override
+			protected void updateItem(Vendedor vendedor, boolean empty) {
+				super.updateItem(vendedor, empty);
+				if (vendedor == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(button);
+				button.setOnAction(event -> criarForm("/gui/SetorFormView.fxml", Utils.currentStage(event), vendedor));
+			}
+		});
+	}
+	
+	private void initRemoveButtons() {
+		tbRemove.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tbRemove.setCellFactory(param -> new TableCell<Vendedor, Vendedor>() {
+			private final Button button = new Button("Remove");
+
+			@Override
+			protected void updateItem(Vendedor vendedor, boolean empty) {
+				super.updateItem(vendedor, empty);
+				if (vendedor == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(button);
+				//button.setOnAction(event -> removeEntity(vendedor));
+			}
+		});
+	}
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -101,6 +145,7 @@ public class VendedorViewControler implements Initializable {
 		Utils.formatTableColumnDate(tcDataNascimento, "dd/MM/yyyy");
 		tcEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 		tcSalario.setCellValueFactory(new PropertyValueFactory<>("salario"));
+		Utils.formatTableColumnDouble(tcSalario, 2);
 		tcSetor.setCellValueFactory(new PropertyValueFactory<>("setor"));
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tvVendedor.prefHeightProperty().bind(stage.heightProperty());

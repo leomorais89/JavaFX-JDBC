@@ -78,7 +78,7 @@ public class VendedorDaoJDBC implements VendedorDao {
 			int teste = st.executeUpdate();
 			
 			if(teste > 0) {
-				Alerts.showAlert("Sucesso", null, "Vendedor " + vendedor.getNome() + " cadastrado com sucesso", AlertType.INFORMATION);
+				Alerts.showAlert("Sucesso", null, "Vendedor(a) " + vendedor.getNome() + " cadastrado com sucesso", AlertType.INFORMATION);
 			}
 		}
 		catch (SQLException e) {

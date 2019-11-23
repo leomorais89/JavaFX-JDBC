@@ -59,8 +59,7 @@ public class SetorFormControler implements Initializable {
 	}
 	
 	private Setor getFormData() {
-		
-		erros = new HashMap<String, String>();
+		erros.clear();
 		Setor setor = new Setor();
 		setor.setId(Utils.tryParseToInt(txtId.getText()));
 		setor.setNome(txtNome.getText());

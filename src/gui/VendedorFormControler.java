@@ -5,10 +5,13 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
+import gui.util.Conteudo;
 import gui.util.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entities.Setor;
 import model.entities.Vendedor;
@@ -38,10 +42,20 @@ public class VendedorFormControler implements Initializable {
 	private ComboBox<Setor> cbSetor;
 	@FXML
 	private Button btnSalvar;
+	@FXML
+	private Button btnCancelar;
+	@FXML
+	private Label lblMsgErroNome;
+	@FXML
+	private Label lblMsgErroDataNascimento;
+	@FXML
+	private Label lblMsgErroSalario;
 
 	private Vendedor vendedor;
 	private VendedorService servicoService;
 	private SetorService setorService;
+	
+	Map<String, String> erros = new HashMap<>();
 	
 	@FXML
 	public void onBtnSalvarAction(ActionEvent evento) {
@@ -52,10 +66,18 @@ public class VendedorFormControler implements Initializable {
 			throw new IllegalStateException("Serviço Vendedor está vazio!");
 		}
 		vendedor = getFormDate();
-		servicoService.saveOrUpdate(vendedor);
+		if (erros.size() < 1) {
+			servicoService.saveOrUpdate(vendedor);
+			Utils.currentStage(evento).close();
+			MainViewControler controle = new MainViewControler();
+			controle.onMiVendedorAction();
+		}
+		erros.clear();
+	}
+	
+	@FXML
+	public void onBtnCancelarAction(ActionEvent evento) {
 		Utils.currentStage(evento).close();
-		MainViewControler controle = new MainViewControler();
-		controle.onMiVendedorAction();
 	}
 	
 	public void setVendedor(Vendedor vendedor) {
@@ -94,19 +116,43 @@ public class VendedorFormControler implements Initializable {
 	}
 	
 	private Vendedor getFormDate() {
+		erros.clear();
 		Vendedor vendedor = new Vendedor();
 		vendedor.setId(Utils.tryParseToInt(txtId.getText()));
 		vendedor.setNome(txtNome.getText());
-		vendedor.setDataNascimento(Date.from(Instant.from(dpDataNascimento.getValue().atStartOfDay(ZoneId.systemDefault()))));
+		if (txtNome.getText() == null) {
+			erros.put("Nome","Nome não pode ser em branco!");
+		}
+		else if (txtNome.getText().trim().equals("")) {
+			erros.put("Nome","Nome não pode ser em branco!"); 
+		}
+		if (dpDataNascimento.getValue() == null) {
+			erros.put("DataNascimento", "Data de Nascimento não pode ficar vazia");
+		}
+		else {
+			vendedor.setDataNascimento(Date.from(Instant.from(dpDataNascimento.getValue().atStartOfDay(ZoneId.systemDefault()))));
+		}
 		vendedor.setEmail(txtEmail.getText());
-		vendedor.setSalario(Double.parseDouble(txtSalario.getText()));
+		if (txtSalario.getText().trim().equals("")) {
+			erros.put("Salario", "Salario não pode ficar vazio");
+		}
+		else {
+			vendedor.setSalario(Double.parseDouble(txtSalario.getText()));
+		}
 		vendedor.setSetor(cbSetor.getValue());
+		
+		if (erros.size() > 0) {
+			lblMsgErroNome.setText(erros.get("Nome"));
+			lblMsgErroDataNascimento.setText(erros.get("DataNascimento"));
+			lblMsgErroSalario.setText(erros.get("Salario"));
+		}
+		
 		return vendedor;
 	}
 	
 	@Override
 	public void initialize(URL urs, ResourceBundle rb) {
-		
+		Conteudo.setTextFieldDouble(txtSalario);
 	}
 
 }
