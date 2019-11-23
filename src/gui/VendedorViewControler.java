@@ -2,11 +2,14 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import application.Main;
+import db.dbException;
 import gui.util.Alerts;
 import gui.util.Utils;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -19,6 +22,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -71,7 +75,13 @@ public class VendedorViewControler implements Initializable {
 		if (servico == null) {
 			throw new IllegalStateException("Serviço está vazio");
 		}
-		List<Vendedor> list = servico.todosVendedores();
+		List<Vendedor> list = new ArrayList<Vendedor>();
+		try {
+			list = servico.todosVendedores();
+		}
+		catch (dbException e) {
+			Alerts.showAlert("Erro", null, e.getMessage(), AlertType.ERROR);
+		}
 		ObservableList<Vendedor> obsVendedor = FXCollections.observableArrayList(list);
 		tvVendedor.setItems(obsVendedor);
 		initEditButtons();
@@ -132,11 +142,22 @@ public class VendedorViewControler implements Initializable {
 					return;
 				}
 				setGraphic(button);
-				//button.setOnAction(event -> removeEntity(vendedor));
+				button.setOnAction(event -> removeEntity(vendedor));
 			}
 		});
 	}
 	
+	protected void removeEntity(Vendedor vendedor) {
+		Optional<ButtonType> resultado = Alerts.showConfirmation("Confirmação", "Você realmente deseja excluir o(a) vendedor(a) " + vendedor.getNome() + " ?");
+		if (resultado.get() == ButtonType.OK) {
+			if (servico == null) {
+				throw new IllegalStateException("Serviço está vazio!");
+			}
+			servico.remover(vendedor);
+			updateTableView();
+		}
+	}
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		tcId.setCellValueFactory(new PropertyValueFactory<>("id"));

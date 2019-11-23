@@ -11,6 +11,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import db.dbException;
+import gui.util.Alerts;
 import gui.util.Conteudo;
 import gui.util.Utils;
 import javafx.event.ActionEvent;
@@ -21,6 +23,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import model.entities.Setor;
 import model.entities.Vendedor;
 import model.services.SetorService;
@@ -67,10 +70,15 @@ public class VendedorFormControler implements Initializable {
 		}
 		vendedor = getFormDate();
 		if (erros.size() < 1) {
-			servicoService.saveOrUpdate(vendedor);
-			Utils.currentStage(evento).close();
-			MainViewControler controle = new MainViewControler();
-			controle.onMiVendedorAction();
+			try {
+				servicoService.saveOrUpdate(vendedor);
+				Utils.currentStage(evento).close();
+				MainViewControler controle = new MainViewControler();
+				controle.onMiVendedorAction();
+			}
+			catch (dbException e) {
+				Alerts.showAlert("Erro", null, e.getMessage(), AlertType.ERROR);
+			}
 		}
 		erros.clear();
 	}

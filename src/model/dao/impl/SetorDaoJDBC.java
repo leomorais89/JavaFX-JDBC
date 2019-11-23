@@ -7,8 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.SQLError;
+
 import db.DB;
 import db.dbException;
+import db.dbIntegridadeException;
 import gui.util.Alerts;
 import javafx.scene.control.Alert.AlertType;
 import model.dao.SetorDao;
@@ -32,9 +35,6 @@ public class SetorDaoJDBC implements SetorDao {
 			
 			if (teste > 0) {
 				Alerts.showAlert("Sucesso", null, "Setor " + setor.getNome() + " cadastrado com sucesso!", AlertType.INFORMATION);
-			}
-			else {
-				throw new dbException("Erro ao inserir dados no banco");
 			}
 		}
 		catch (SQLException e) {
@@ -104,13 +104,10 @@ public class SetorDaoJDBC implements SetorDao {
 			if (teste > 0) {
 				Alerts.showAlert("Exclusão de dados", null, "Setor " + setor.getNome() + " foi excluido com sucesso!", AlertType.INFORMATION);
 			}
-			else {
-				throw new dbException("Erro ao excluir o dado");
-			}
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
-			throw new dbException(e.getMessage());
+			throw new dbIntegridadeException(e.getMessage());
 		}
 		finally {
 			DB.closeStatement(st);

@@ -22,4 +22,8 @@ public class VendedorService {
 			dao.update(vendedor);
 		}
 	}
+	
+	public void remover(Vendedor vendedor) {
+		dao.delVendedor(vendedor);
+	}
 }

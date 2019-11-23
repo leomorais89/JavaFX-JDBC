@@ -2,6 +2,7 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -86,7 +87,13 @@ public class SetorViewControler implements Initializable {
 		if (servico == null) {
 			throw new IllegalStateException("Serviço estava vazio");
 		}
-		List<Setor> list = servico.todosSetores();
+		List<Setor> list = new ArrayList<Setor>();
+		try {
+			list = servico.todosSetores();
+		}
+		catch (dbException e) {
+			Alerts.showAlert("Erro", null, e.getMessage(), AlertType.ERROR);
+		}
 		ObservableList<Setor> obsSetor = FXCollections.observableArrayList(list);
 		tvSetor.setItems(obsSetor);
 		initEditButtons();
@@ -130,17 +137,17 @@ public class SetorViewControler implements Initializable {
 	}
 	
 	private void removeEntity(Setor setor) {
-		Optional<ButtonType> resultado = Alerts.showConfirmation("Confirmar Exclusão", "Realmente deseja excluir esse Setor?");
+		Optional<ButtonType> resultado = Alerts.showConfirmation("Confirmar Exclusão", "Realmente deseja excluir o setor " + setor.getNome() + "?");
 		if (resultado.get() == ButtonType.OK) {
 			if (servico == null) {
-				throw new dbException("Serviço esta vazio!");
+				throw new IllegalStateException("Serviço esta vazio!");
 			}
 			try {
 				servico.remover(setor);
 				updateTableView();
 			}
 			catch (dbIntegridadeException e) {
-				Alerts.showAlert("Acesso negado", null, e.getMessage(), AlertType.INFORMATION);
+				Alerts.showAlert("Acesso negado", null, "Você não pode excluir o setor " + setor.getNome() + ". Ainda existe vendedor vinculado a ele!", AlertType.ERROR);
 			}
 		}
 	}

@@ -1,7 +1,6 @@
 package model.dao.impl;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +11,7 @@ import java.util.Map;
 
 import db.DB;
 import db.dbException;
+import db.dbIntegridadeException;
 import gui.util.Alerts;
 import javafx.scene.control.Alert.AlertType;
 import model.dao.VendedorDao;
@@ -86,6 +86,9 @@ public class VendedorDaoJDBC implements VendedorDao {
 			e.printStackTrace();
 			throw new dbException(e.getMessage());
 		}
+		finally {
+			DB.closeStatement(st);
+		}
 	}
 
 	@Override
@@ -108,6 +111,29 @@ public class VendedorDaoJDBC implements VendedorDao {
 		catch (SQLException e) {
 			e.printStackTrace();
 			throw new dbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		}
+	}
+
+	@Override
+	public void delVendedor(Vendedor vendedor) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("delete from vendedor where idVendedor=?");
+			st.setInt(1, vendedor.getId());
+			int teste = st.executeUpdate();
+			
+			if (teste > 0) {
+				Alerts.showAlert("Sucesso", null, "Vendedor(a) " + vendedor.getNome() + " excluido com sucesso!", AlertType.INFORMATION);
+			}
+		}
+		catch (SQLException e) {
+			throw new dbIntegridadeException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
 		}
 	}
 }

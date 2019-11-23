@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import db.dbException;
+import gui.util.Alerts;
 import gui.util.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import model.entities.Setor;
 import model.services.SetorService;
 
@@ -50,10 +53,15 @@ public class SetorFormControler implements Initializable {
 		}
 		setor = getFormData();
 		if (erros.size() < 1) {
-			servico.saveOrUpdate(setor);
-			Utils.currentStage(evento).close();
-			MainViewControler controle = new MainViewControler();
-			controle.onMiSetorAction();
+			try {
+				servico.saveOrUpdate(setor);
+				Utils.currentStage(evento).close();
+				MainViewControler controle = new MainViewControler();
+				controle.onMiSetorAction();
+			}
+			catch (dbException e) {
+				Alerts.showAlert("Erro", null, e.getMessage(), AlertType.ERROR);
+			}
 		}
 		erros.clear();
 	}
